@@ -1,10 +1,11 @@
-FROM node:alpine
+FROM node:10
 EXPOSE 3000
 ENV NODE_ENV=production
-USER node
-WORKDIR /app
 
+WORKDIR /app
 COPY . /app/
-RUN ["npm", "install"]
+
+RUN chgrp -R 0 /app/ && \
+    npm install
 
 CMD ["npm", "start"]
