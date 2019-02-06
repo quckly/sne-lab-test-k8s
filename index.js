@@ -1,9 +1,14 @@
+'use strict';
+console.log("Begin index.js")
+
 const express = require('express')
 const os = require('os')
 const fs = require('fs')
 const crypto = require('crypto');
 const app = express()
 const port = 3000
+
+app.use('/public', express.static('public'))
 
 app.get('/', (req, res) => {
     let hostname = "not available"
@@ -15,6 +20,9 @@ app.get('/', (req, res) => {
     res.send('Container name: ' + os.hostname() + ". Host: " + hostname)
 })
 
+app.get('/content', (req, res) => {
+    res.sendFile(__dirname + 'public/index.html');
+})
 
 app.get('/healtz', (req, res) => {
     res.send('Ok!')
@@ -38,13 +46,13 @@ app.get('/cpu', (req, res) => {
     const hash = crypto.createHmac('sha256', secret);
 
     let i = 0
-    while (i < 1000) {
+    while (i < 100 * 1000) {
         hash.update('I love cupcakes')
         i++
     }
 
     res.send('Container name: ' + os.hostname() + ". Host: " + hostname +
-        "Fibonacci of 25 is " + fibo(25) + ". Hash is " + hash.digest('hex'))
+        "\nFibonacci of 50 is " + fibo(50) + ". Hash is " + hash.digest('hex'))
 })
 
 app.listen(port, () => {
