@@ -5,10 +5,13 @@ const express = require('express')
 const os = require('os')
 const fs = require('fs')
 const crypto = require('crypto')
+const path = require('path')
 const app = express()
 const port = 3000
 
-app.use('/public', express.static('public'))
+console.log(path.join(__dirname, 'public'))
+
+app.use('/public', express.static(path.join(__dirname, 'public')));
 
 app.get('/', (req, res) => {
     let hostname = "not available"
@@ -24,7 +27,7 @@ app.get('/', (req, res) => {
 app.get('/content', (req, res) => {
     getHash()
 
-    res.sendFile(__dirname + '/public/index.html')
+    res.sendFile(path.join(__dirname, 'public/index.html'))
 })
 
 app.get('/healtz', (req, res) => {
@@ -43,7 +46,7 @@ function getHash() {
     const hash = crypto.createHmac('sha256', secret);
 
     let i = 0
-    while (i < 100 * 1000) {
+    while (i < (10 * 1000)) {
         hash.update('I love cupcakes');
         i++;
     }
@@ -59,7 +62,7 @@ app.get('/cpu', (req, res) => {
     } catch(e) {}
 
     res.send('Container name: ' + os.hostname() + ". Host: " + hostname +
-        "\nFibonacci of 50 is " + fibo(50) + ". Hash is " + getHash())
+        "\nFibonacci of 30 is " + fibo(30) + ". Hash is " + getHash())
 })
 
 app.listen(port, () => {
