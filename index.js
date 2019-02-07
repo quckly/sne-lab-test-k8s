@@ -24,7 +24,7 @@ app.get('/', (req, res) => {
 app.get('/content', (req, res) => {
     getHash()
 
-    res.sendFile(__dirname + 'public/index.html')
+    res.sendFile(__dirname + '/public/index.html')
 })
 
 app.get('/healtz', (req, res) => {
