@@ -4,7 +4,7 @@ console.log("Begin index.js")
 const express = require('express')
 const os = require('os')
 const fs = require('fs')
-const crypto = require('crypto');
+const crypto = require('crypto')
 const app = express()
 const port = 3000
 
@@ -17,11 +17,14 @@ app.get('/', (req, res) => {
         hostname = fs.readFileSync('/tmp/mainhostname', encoding='utf-8')
     } catch(e) {}
 
-    res.send('Container name: ' + os.hostname() + ". Host: " + hostname)
+    res.send('Container name: ' + os.hostname() + ". Host: " + hostname + "\n" +
+            "Node.JS Version = " + process.version)
 })
 
 app.get('/content', (req, res) => {
-    res.sendFile(__dirname + 'public/index.html');
+    getHash()
+
+    res.sendFile(__dirname + 'public/index.html')
 })
 
 app.get('/healtz', (req, res) => {
@@ -35,6 +38,19 @@ function fibo(n) {
         return fibo(n - 2) + fibo(n - 1);
 }
 
+function getHash() {
+    const secret = 'abcdefg';
+    const hash = crypto.createHmac('sha256', secret);
+
+    let i = 0
+    while (i < 100 * 1000) {
+        hash.update('I love cupcakes');
+        i++;
+    }
+
+    return hash.digest('hex');
+}
+
 app.get('/cpu', (req, res) => {
     let hostname = "not available"
     
@@ -42,17 +58,8 @@ app.get('/cpu', (req, res) => {
         hostname = fs.readFileSync('/tmp/mainhostname', encoding='utf-8')
     } catch(e) {}
 
-    const secret = 'abcdefg';
-    const hash = crypto.createHmac('sha256', secret);
-
-    let i = 0
-    while (i < 100 * 1000) {
-        hash.update('I love cupcakes')
-        i++
-    }
-
     res.send('Container name: ' + os.hostname() + ". Host: " + hostname +
-        "\nFibonacci of 50 is " + fibo(50) + ". Hash is " + hash.digest('hex'))
+        "\nFibonacci of 50 is " + fibo(50) + ". Hash is " + getHash())
 })
 
 app.listen(port, () => {
