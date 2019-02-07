@@ -46,7 +46,7 @@ function getHash() {
     const hash = crypto.createHmac('sha256', secret);
 
     let i = 0
-    while (i < (10 * 1000)) {
+    while (i < (500 * 1000)) {
         hash.update('I love cupcakes');
         i++;
     }
@@ -62,7 +62,7 @@ app.get('/cpu', (req, res) => {
     } catch(e) {}
 
     res.send('Container name: ' + os.hostname() + ". Host: " + hostname +
-        "\nFibonacci of 30 is " + fibo(30) + ". Hash is " + getHash())
+        "\nFibonacci of 35 is " + fibo(35) + ". Hash is " + getHash())
 })
 
 app.listen(port, () => {
