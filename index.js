@@ -11,9 +11,13 @@ const port = 3000
 
 console.log(path.join(__dirname, 'public'))
 
+let metrics = {visits: 0}
+
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
 app.get('/', (req, res) => {
+    metrics.visits++
+
     let hostname = "not available"
     
     try {
@@ -25,6 +29,8 @@ app.get('/', (req, res) => {
 })
 
 app.get('/content', (req, res) => {
+    metrics.visits++
+
     getHash()
 
     res.sendFile(path.join(__dirname, 'public/index.html'))
@@ -32,6 +38,10 @@ app.get('/content', (req, res) => {
 
 app.get('/healtz', (req, res) => {
     res.send('Ok!')
+})
+
+app.get('/metrics', (req, res) => {
+    res.send('visitCount=' + metrics.visits)
 })
 
 function fibo(n) { 
@@ -55,6 +65,8 @@ function getHash() {
 }
 
 app.get('/cpu', (req, res) => {
+    metrics.visits++
+
     let hostname = "not available"
     
     try {
